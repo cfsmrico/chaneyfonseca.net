@@ -3,5 +3,13 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
+    script(src='/js/lib/angular.js')
+  body(ng-app='')
+    div
+      img#avatar(src='/images/clipartlord-knight3.png')
+      p Chaney Fonseca
+    nav
+      a(href='test') LINK 1 | 
+      a(href='test2') LINK 2 |
+      a(href='test3') LINK N
     block content

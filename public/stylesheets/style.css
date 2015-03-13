@@ -3,6 +3,16 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+body a {
+  /*color: #00B7FF;*/
+  color: darkred;
+}
+
+#avatar {
+    width: 225px;
+    height: 175px;
+}
+
+nav a {
+    color: #555;
 }
