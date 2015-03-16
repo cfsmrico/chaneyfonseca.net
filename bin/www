@@ -88,3 +88,17 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+
+// ga-tsp-websockets
+var io = require('socket.io')(server);
+var gaTsp = require('../ga-tsp/app.js');
+
+io.on('connection', function(socket) {
+  console.log('a user connected');
+
+  socket.on('run-ga-tsp', function(data) {
+    console.log(data);
+    gaTsp.run(socket, data);
+  });
+});

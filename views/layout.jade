@@ -3,13 +3,28 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='/js/lib/angular.js')
-  body(ng-app='')
-    div
-      img#avatar(src='/images/clipartlord-knight3.png')
-      p Chaney Fonseca
-    nav
-      a(href='test') LINK 1 | 
-      a(href='test2') LINK 2 |
-      a(href='test3') LINK N
-    block content
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    script(src='/js/lib/angular.min.js')
+    script(src='/js/lib/jquery.min.js')
+    script(src='/js/lib/bootstrap.min.js')
+    script(src='/js/lib/socket.io.js')
+    script(src='/js/controllers/contactController.js')   
+    script(src='/js/controllers/gatspController.js') 
+  body(ng-app='chaneyfonseca')
+    div#fixed-width-wrapper
+      div.container-fluid
+        div.row#avatar-row
+          div.col-sm-3
+            img#avatar(src='/images/clipartlord-knight3.png')
+          div.col-sm-9
+            h1#my-name Chaney Fonseca
+          nav#top-menu-nav.col-sm-9
+            div.col-sm-2
+              a(href='/') HOME
+            div.col-sm-2
+              a(href='about') ABOUT
+            div.col-sm-2
+              a(href='family') FAMILY
+            div.col-sm-3
+              a(href='contact') CONTACT 
+      block content
