@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  div
+    br
+    div.row
+      h3.col-sm-offset-3.col-sm-8.red #[strong Genetic Algorithm - Traveling Salesman] 
+    br
+    div.row
+      form.col-sm-3(ng-submit='runSim()', ng-controller='gatspController')
+        div.row
+          h4.col-sm-10.col-sm-offset-4 #[strong Input]
+        div.row
+          label(for='nCities').h4.col-sm-6 # Cities
+          input(type='number', min='10', max='100', name='nCities', ng-model='nCities', ng-init='nCities=40')#nCities.col-sm-4.ga-tsp
+        div.row
+          label(for='population').h4.col-sm-6 Population
+          input(type='number', min='10', max='1000', name='population', ng-model='population', ng-init='population=100')#population.col-sm-4.ga-tsp
+        div.row
+          label(for='mutationPct').h4.col-sm-6 Mutation %
+          input(type='number', min='0', max='100', name='mutationPct', ng-model='mutationPct', ng-init='mutationPct=9')#mutationPct.col-sm-4.ga-tsp
+        div.row
+          label(for='nGenerations').h4.col-sm-6 Generations
+          input(type='number', min='100', max='9999', name='nGenerations', ng-model='nGenerations', ng-init='nGenerations=1000')#nGenerations.col-sm-4.ga-tsp
+        div.row
+          input(type='submit', value='GO!')#goButton.h4.col-sm-5.col-sm-offset-3
+      div.col-sm-7
+        div.row
+          h4.col-sm-10.col-sm-offset-5 #[strong Result]
+        canvas#tsp-graph.col-sm-12

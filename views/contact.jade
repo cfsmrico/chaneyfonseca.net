@@ -1,0 +1,21 @@
+extends layout
+block content
+  div(ng-controller='ContactController')
+    br
+    form#contact-form.container-fluid(ng-submit='submitForm()')
+      div.row
+        div.form-group.col-sm-4.col-sm-offset-1
+          label(for='name').h3 Name
+          input#name.form-control.thick(name='name', type='text', placeholder='Jane Doe', ng-model='name' required)
+        div.form-group.col-sm-4
+          label(for='email').h3 Email Address
+          input#email.form-control.thick(name='email', type='email', placeholder='jane@domain.com', ng-model='email' required)
+      div.row
+        div.form-group.col-sm-8.col-sm-offset-1
+          label(for='message').h3 Message
+          textarea#message.form-control.thick(name='message', placeholder='Hey, Chaney!  Good news...', form='contact-form', rows='5', ng-model='message' required)
+      div.row
+        div#submit-button-container.col-sm-4.col-sm-offset-1
+          input#submit-button.btn.btn-default.h3(type='submit', name='submit', value='Send Message')
+        div.col-sm-4
+          p#status-msg.h4 {{statusMsg}}
