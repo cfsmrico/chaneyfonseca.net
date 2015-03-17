@@ -12,7 +12,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '80');
 app.set('port', port);
 
 /**
@@ -95,10 +95,7 @@ var io = require('socket.io')(server);
 var gaTsp = require('../ga-tsp/app.js');
 
 io.on('connection', function(socket) {
-  console.log('a user connected');
-
   socket.on('run-ga-tsp', function(data) {
-    console.log(data);
     gaTsp.run(socket, data);
   });
 });

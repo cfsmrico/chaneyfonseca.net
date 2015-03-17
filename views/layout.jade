@@ -1,5 +1,5 @@
 doctype html
-html
+html(ng-app='chaneyfonseca')
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
@@ -8,9 +8,8 @@ html
     script(src='/js/lib/jquery.min.js')
     script(src='/js/lib/bootstrap.min.js')
     script(src='/js/lib/socket.io.js')
-    script(src='/js/controllers/contactController.js')   
-    script(src='/js/controllers/gatspController.js') 
-  body(ng-app='chaneyfonseca')
+    script(src='/js/controllers/controllers.js')
+  body
     div#fixed-width-wrapper
       div.container-fluid
         div.row#avatar-row
@@ -22,9 +21,8 @@ html
             div.col-sm-2
               a(href='/') HOME
             div.col-sm-2
-              a(href='about') ABOUT
-            div.col-sm-2
-              a(href='family') FAMILY
+              a(href='family/slideshow/') FAMILY
             div.col-sm-3
               a(href='contact') CONTACT 
+  
       block content

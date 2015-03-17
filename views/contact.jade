@@ -1,6 +1,7 @@
 extends layout
+
 block content
-  div(ng-controller='ContactController')
+  div(ng-controller="contactController")
     br
     form#contact-form.container-fluid(ng-submit='submitForm()')
       div.row
@@ -13,7 +14,7 @@ block content
       div.row
         div.form-group.col-sm-8.col-sm-offset-1
           label(for='message').h3 Message
-          textarea#message.form-control.thick(name='message', placeholder='Hey, Chaney!  Good news...', form='contact-form', rows='5', ng-model='message' required)
+          textarea#message.form-control.thick(name='message', placeholder='Hey, Chaney!  Good news...', form='contact-form', rows='5', ng-model='message', required)
       div.row
         div#submit-button-container.col-sm-4.col-sm-offset-1
           input#submit-button.btn.btn-default.h3(type='submit', name='submit', value='Send Message')

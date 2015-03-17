@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var about = require('./routes/about');
-var family = require('./routes/family');
 var contact = require('./routes/contact');
 var gatsp = require('./routes/ga-tsp');
 
@@ -27,7 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/about', about);
-app.use('/family', family);
 app.use('/contact', contact);
 app.use('/ga-tsp', gatsp);
 

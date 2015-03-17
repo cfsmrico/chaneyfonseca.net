@@ -2,10 +2,8 @@ extends layout
 
 block content
   div
-    br
     div.row
       h3.col-sm-offset-3.col-sm-8.red #[strong Genetic Algorithm - Traveling Salesman] 
-    br
     div.row
       form.col-sm-3(ng-submit='runSim()', ng-controller='gatspController')
         div.row
@@ -23,8 +21,15 @@ block content
           label(for='nGenerations').h4.col-sm-6 Generations
           input(type='number', min='100', max='9999', name='nGenerations', ng-model='nGenerations', ng-init='nGenerations=1000')#nGenerations.col-sm-4.ga-tsp
         div.row
-          input(type='submit', value='GO!')#goButton.h4.col-sm-5.col-sm-offset-3
+          input(type='submit', value='GO!')#goButton.h4.col-sm-5
       div.col-sm-7
         div.row
-          h4.col-sm-10.col-sm-offset-5 #[strong Result]
-        canvas#tsp-graph.col-sm-12
+          h4#result-text.col-sm-10.col-sm-offset-4
+            strong Result
+        div.row
+          canvas#tsp-graph.col-sm-12
+        div.row#initial-gen-row
+          h4#initial-text.col-sm-10.col-sm-offset-4
+            strong 
+        div.row
+          canvas#tsp-graph-g1.col-sm-12

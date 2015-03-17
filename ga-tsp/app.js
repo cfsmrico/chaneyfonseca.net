@@ -1,5 +1,4 @@
 exports.run = function(socket, data) {
-    console.log('running ga-tsp app with data: ' + data);
     var City = require('./City.js');
     var Tour = require('./Tour.js');
     var crossoverMutation = require('./ga.js');
@@ -15,7 +14,7 @@ exports.run = function(socket, data) {
     var maxGenerations = data.nGenerations > 0 ? data.nGenerations : 1000;
     var mutationOperation = 1;    // 0 for random city swap and 1 for RSM
     var tournamentSize = 4;
-    var outputNthGenSolution = 100;  // output the path and the fitness of the best solution every N generations
+    var outputNthGenSolution = 10;  // output the path and the fitness of the best solution every N generations
 
     // returns randomly-sorted array
     var fisherYatesShuffle = function (array) {
@@ -120,6 +119,7 @@ exports.run = function(socket, data) {
     var rankedTours = rankTours(tours);
 
     console.log('Initial solution has fitness ' + rankedTours[0].fitness + ' and path ' + rankedTours[0].path);
+    socket.emit('tsp-initial', {'fitness': rankedTours[0].fitness, 'path': rankedTours[0].path});
 
     while (currentGeneration <= maxGenerations) {
         // create nextGen array and move over fittest two tours unaltered (elitism)
@@ -174,7 +174,6 @@ exports.run = function(socket, data) {
         }
     }
 
-    console.log('Sim run on ' + nCities + ' cities');
     console.log('Final solution has fitness ' + rankedTours[0].fitness + ' and path  ' + rankedTours[0].path);
     socket.emit('tsp-done', {'fitness': rankedTours[0].fitness, 'path': rankedTours[0].path});
 };
