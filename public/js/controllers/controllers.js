@@ -27,7 +27,7 @@ app.controller('gatspController', ['$scope', '$http', function($scope, $http) {
   $scope.statusMsg = '';
 
   $scope.runSim = function() {
-    $('#result-text').html('<strong>Intermediate Result</strong>');
+    $('#result-text').html('<strong>Cogitating...</strong>');
     initialFitness = 0.0;
     finalFitness = 0.0;
     var socket = io.connect('http://localhost:3000');
@@ -37,14 +37,14 @@ app.controller('gatspController', ['$scope', '$http', function($scope, $http) {
     socket.on('tsp-initial', $scope.drawInitialResult);
 
     // create graph
-    graph = [];
+    $scope.graph = [];
     for (var i = 0; i < $scope.nCities; ++i) {
         var x = Math.floor(Math.random() * X_MAX) + 5;
         var y = Math.floor(Math.random() * Y_MAX) + 5;
-        graph[i] = {'x': x, 'y': y};
+        $scope.graph[i] = {'x': x, 'y': y};
     }
 
-    socket.emit('run-ga-tsp',  {'graph': graph, 'population': $scope.population, 'mutationPct': $scope.mutationPct, 'nGenerations': $scope.nGenerations});
+    socket.emit('run-ga-tsp',  {'graph': $scope.graph, 'population': $scope.population, 'mutationPct': $scope.mutationPct, 'nGenerations': $scope.nGenerations});
   };
 
   $scope.drawBestTour = function(data) {
@@ -53,7 +53,7 @@ app.controller('gatspController', ['$scope', '$http', function($scope, $http) {
     var canvas = document.getElementById('tsp-graph');
     var c = canvas.getContext('2d');
     c.clearRect(0, 0, canvas.width, canvas.height);
-    var g = graph;
+    var g = $scope.graph;
 
     // re-draw cities on canvas
     for (var i = 0; i < path.length; ++i) {
@@ -80,8 +80,9 @@ app.controller('gatspController', ['$scope', '$http', function($scope, $http) {
     $scope.drawBestTour(data);
     finalFitness = data.fitness;
 
-    $('#result-text').html('<strong>Final Result</strong>');
+    $('#result-text').html('<strong>Final Result (fitness: ' + Math.round(data.fitness) + '):</strong>');
     console.log('finished!');
+
   };
 
   $scope.drawInitialResult = function(data) {
@@ -92,7 +93,7 @@ app.controller('gatspController', ['$scope', '$http', function($scope, $http) {
     var canvas = document.getElementById('tsp-graph-g1');
     var c = canvas.getContext('2d');
     c.clearRect(0, 0, canvas.width, canvas.height);
-    var g = graph;
+    var g = $scope.graph;
 
     // re-draw cities on canvas
     for (var i = 0; i < path.length; ++i) {
@@ -116,6 +117,6 @@ app.controller('gatspController', ['$scope', '$http', function($scope, $http) {
 
     initialFitness = data.fitness;
 
-    $('#initial-text').html('<strong>Gen 1:</strong>');
+    $('#initial-text').html('<strong>Best Tour Gen 1 (fitness: ' + Math.round(data.fitness) + '):</strong>');
   };
 }]);
