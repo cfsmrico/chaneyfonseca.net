@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
+var validator = require('validator');
 
 var transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: 'jane@domain.com',
-    pass: 'passXYZ'
+    user: 'xyz@gmail.com',
+    pass: 'xyz'
   }
 });
 
@@ -19,10 +20,10 @@ router.post('/', function(req, res, next) {
   res.status(200).end();
 
   transporter.sendMail({
-    from: req.body.email,
-    to: 'jane@domain.com',
-    subject: 'Hello, from ' + req.body.name + ' <' + req.body.email + '>',
-    text: req.body.message
+    from: validator.escape(req.body.email),
+    to: 'xyz@gmail.com',
+    subject: 'Hello, from ' + validator.escape(req.body.name) + ' <' + validator.escape(req.body.email) + '>',
+    text: validator.escape(req.body.message)
   });
 });
 
