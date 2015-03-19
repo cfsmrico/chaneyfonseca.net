@@ -5,7 +5,7 @@ block content
     div.row
       h3.col-sm-offset-3.col-sm-8.red #[strong Genetic Algorithm - Traveling Salesman] 
       p#description.col-sm-11.
-        This is a solution to the traveling salesman problem (an NP-hard problem) using a genetic algorithm.  Coded in nodejs with data transmitted from an AWS server to your browser via Web Sockets (socket.io) and the visualization in HTML5 Canvas.  You can see even up to a 70-city graph, a solution is reached very quickly (given, say, you retain the default inputs I've placed with a mere 100 chromosomes in the population and a mutation rate of 9%).  You can get the code (and most of this site, actually), on#[a(href='https://github.com/cfsmrico/chaneyfonseca.net')  Github]
+        This is a solution to the #[a(href='http://en.wikipedia.org/wiki/Travelling_salesman_problem') traveling salesman problem] (an NP-hard problem) using a genetic algorithm.  Coded in nodejs with data transmitted from an AWS server in Seattle to your browser via Web Sockets (socket.io) and the visualization client-side in HTML5 Canvas.  You can see that even up to a 75-city graph or so, a solution is reached very quickly (given, say, you retain the default inputs I've placed with a mere 100 chromosomes in the population and a mutation rate of 9%).  You can get the code (and most of this site, actually), on#[a(href='https://github.com/cfsmrico/chaneyfonseca.net')  Github].  Smash the GO! button to run the sim.
     div.row
       form.col-sm-3(ng-submit='runSim()', ng-controller='gatspController')
         div.row
