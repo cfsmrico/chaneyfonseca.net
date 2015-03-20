@@ -1,13 +1,96 @@
-exports.run = function(socket, data) {
-    var City = require('./City.js');
-    var Tour = require('./Tour.js');
-    var crossoverMutation = require('./ga.js');
-    var euclideanDistance = require('euclidean-distance');
-    var argv = require('minimist')(process.argv.slice(2));
+onmessage = function(e) {   // e.data contains given data object
+    var City = function(name, x, y) {
+      this.name = name;
+      this.x = x;
+      this.y = y;
+    };
+    var Tour = function(path, fitness) {
+      this.path = path;
+      this.fitness = fitness;
+    };  
+    var swapCityTwoPaths = function(p1, p2, index) {
+      var temp = p1[index];
+      p1[index] = p2[index];
+      p2[index] = temp;
+    };
+    var swapCityOnePath = function(p, i, j) {
+      var temp = p[i];
+      p[i] = p[j];
+      p[j] = temp;
+    };
+    var pickTwoIndices = function(p) {
+      var i = Math.floor(1 + Math.random() * (p.length - 1));
+      var j = i;
+
+      while (i == j) {
+          j = Math.floor(1 + Math.random() * (p.length - 1));
+      }
+
+      return i < j ? [i, j] : [j, i];
+    };
+    var citySwapMutation = function(p) {
+      var c = p.slice(0);
+      var twoIndices = pickTwoIndices(p);
+      swapCityOnePath(c, twoIndices[0], twoIndices[1]);
+      return c;
+    };
+    var rsm = function(p) {
+      var c = p.slice(0);
+      var twoIndices = pickTwoIndices(p);
+
+      for (var i = twoIndices[0], j = twoIndices[1]; i < j; ++i, --j) {
+        swapCityOnePath(c, i, j);
+      }
+
+      return c;
+    };
+    var pmx = function(p1, p2, cut1, cut2) {
+      var offspring = [p1.slice(0), p2.slice(0)];
+      var cut1 = cut1 !== undefined ? cut1 : 1 + Math.floor(Math.random() * (p1.length - 1));   // left side of crossover section
+      var cut2 = cut2 !== undefined ? cut2 : cut1 + 1 + Math.floor(Math.random() * (p1.length - cut1));   // right side of crossover section
+      var mapping1 = [];
+      var mapping2 = [];
+
+      // create a mapping of swapped cities while swapping cities in crossover section
+      for (var i = cut1; i < cut2; ++i) {
+        mapping2[p1[i]] = p2[i];
+        mapping1[p2[i]] = p1[i];
+        swapCityTwoPaths(offspring[0], offspring[1], i);
+      }
+
+      // repair duplicates in offspring using mapping of swapped cities (before crossover section)
+      for (var i = 1; i < cut1; ++i) {
+        while (mapping1[offspring[0][i]] !== undefined) {
+            offspring[0][i] = mapping1[offspring[0][i]];
+        }
+        while (mapping2[offspring[1][i]] !== undefined) {
+            offspring[1][i] = mapping2[offspring[1][i]];
+        }
+      }
+
+      // repair duplicates in offspring using mapping of swapped cities (after crossover section)
+      for (var i = cut2; i < p1.length; ++i) {
+        while (mapping1[offspring[0][i]] !== undefined) {
+            offspring[0][i] = mapping1[offspring[0][i]];
+        }
+        while (mapping2[offspring[1][i]] !== undefined) {
+            offspring[1][i] = mapping2[offspring[1][i]];
+        }
+      }    
+
+      return offspring;
+    };    
+    var euclideanDistance = function(a, b) {
+      var sum = 0;
+      var n;
+      for (n=0; n < a.length; n++) {
+        sum += Math.pow(a[n]-b[n], 2);
+      }
+      return Math.sqrt(sum);
+    };
 
     // configurable params
-    var X_MAX = 400;
-    var Y_MAX = 200;
+    var data = e.data;
     var nCities = data.graph.length > 0 && data.graph.length <= 100 ? data.graph.length : 40;
     var populationSize = data.population > 0 && data.population <= 400 ? data.population : 100;
     var mutationPct = data.mutationPct >= 0 && data.mutationPct <= 100 ? data.mutationPct : 10;
@@ -118,8 +201,8 @@ exports.run = function(socket, data) {
     var currentGeneration = 1;
     var rankedTours = rankTours(tours);
 
-    console.log('Initial solution has fitness ' + rankedTours[0].fitness + ' and path ' + rankedTours[0].path);
-    socket.emit('tsp-initial', {'fitness': rankedTours[0].fitness, 'path': rankedTours[0].path});
+    //console.log('Initial solution has fitness ' + rankedTours[0].fitness + ' and path ' + rankedTours[0].path);
+    postMessage({name: 'tsp-initial', fitness: rankedTours[0].fitness, path: rankedTours[0].path});
 
     while (currentGeneration <= maxGenerations) {
         // create nextGen array and move over fittest two tours unaltered (elitism)
@@ -135,25 +218,25 @@ exports.run = function(socket, data) {
             var p2 = tournamentSelection(rankedTours);     
 
             // crossover
-            var offspring = crossoverMutation.pmx(p1.path, p2.path);
+            var offspring = pmx(p1.path, p2.path);
             nextGen[i] = new Tour(offspring[0]);
             nextGen[j] = new Tour(offspring[1]);
 
             // mutate child 1 if above mutate threshold
             if (Math.floor(Math.random() * 100) < mutationPct) {
                 if (mutationOperation == 0) {
-                    nextGen[i] = new Tour(crossoverMutation.citySwapMutation(nextGen[i].path));
+                    nextGen[i] = new Tour(citySwapMutation(nextGen[i].path));
                 } else {
-                    nextGen[i] = new Tour(crossoverMutation.rsm(nextGen[i].path));
+                    nextGen[i] = new Tour(rsm(nextGen[i].path));
                 }
             }
 
             // mutate child 2 if above mutate threshold
             if (Math.floor(Math.random() * 100) < mutationPct) {
                 if (mutationOperation == 0) {
-                    nextGen[j] = new Tour(crossoverMutation.citySwapMutation(nextGen[j].path));
+                    nextGen[j] = new Tour(citySwapMutation(nextGen[j].path));
                 } else {
-                    nextGen[j] = new Tour(crossoverMutation.rsm(nextGen[j].path));
+                    nextGen[j] = new Tour(rsm(nextGen[j].path));
                 }
             }
         }
@@ -169,11 +252,12 @@ exports.run = function(socket, data) {
 
         // output
         if (currentGeneration % outputNthGenSolution == 0) {
-            //console.log('Generation ' + currentGeneration + "'s best solution has fitness " + rankedTours[0].fitness);
-            socket.emit('tsp-update', {'fitness': rankedTours[0].fitness, 'path': rankedTours[0].path});
+          //console.log('Generation ' + currentGeneration + "'s best solution has fitness " + rankedTours[0].fitness);
+          postMessage({name: 'tsp-update', fitness: rankedTours[0].fitness, path: rankedTours[0].path});            
         }
     }
 
-    console.log('Final solution has fitness ' + rankedTours[0].fitness + ' and path  ' + rankedTours[0].path);
-    socket.emit('tsp-done', {'fitness': rankedTours[0].fitness, 'path': rankedTours[0].path});
-};
+    //console.log('Final solution has fitness ' + rankedTours[0].fitness + ' and path  ' + rankedTours[0].path);
+    postMessage({name: 'tsp-done', fitness: rankedTours[0].fitness, path: rankedTours[0].path});
+    close();
+};  
