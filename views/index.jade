@@ -5,9 +5,9 @@ block content
     div.row
       h3.col-sm-offset-3.col-sm-8.red #[strong Genetic Algorithm - Traveling Salesman] 
       p#description.col-sm-11.
-        This is a solution to the #[a(href='http://en.wikipedia.org/wiki/Travelling_salesman_problem') traveling salesman problem] (an NP-hard problem) using a genetic algorithm.  Coded in nodejs with data transmitted from an AWS server in Seattle to your browser via Web Sockets (socket.io) and the visualization client-side in HTML5 Canvas.  You can see that even up to a 75-city graph or so, a solution is reached very quickly (given, say, you retain the default inputs I've placed with a mere 100 chromosomes in the population and a mutation rate of 9%).  You can get the code (and most of this site, actually), on#[a(href='https://github.com/cfsmrico/chaneyfonseca.net')  Github].  Smash the GO! button to run the sim.
+        This is a solution to the #[a(href='http://en.wikipedia.org/wiki/Travelling_salesman_problem') traveling salesman problem] (an NP-hard problem) using a genetic algorithm.  Originally, this was coded in nodejs #[a(href='/ga-tsp') here].  However, I've since just let the server-side code run client-side via HTML5 Web Workers.  You can see that even up to a 75-city graph or so, a solution is reached very quickly (given, say, you retain the default inputs I've placed with a mere 100 chromosomes in the population and a mutation rate of 9%).  You can get the code (and most of this site, actually), on#[a(href='https://github.com/cfsmrico/chaneyfonseca.net/tree/webWorker')  Github].  #[strong Smash the GO! button to run the sim.]
     div.row
-      form.col-sm-3(ng-submit='runSim()', ng-controller='gatspController')
+      form.col-sm-3(ng-submit='runSim()', ng-controller='gatsp-WW-Controller')
         div.row
           h4.col-sm-10.col-sm-offset-4 #[strong Input]
         div.row
@@ -15,13 +15,13 @@ block content
           input(type='number', min='10', max='100', name='nCities', ng-model='nCities', ng-init='nCities=40')#nCities.col-sm-4.ga-tsp
         div.row
           label(for='population').h4.col-sm-6 Population
-          input(type='number', min='10', max='1000', name='population', ng-model='population', ng-init='population=100')#population.col-sm-4.ga-tsp
+          input(type='number', min='10', max='400', name='population', ng-model='population', ng-init='population=100')#population.col-sm-4.ga-tsp
         div.row
           label(for='mutationPct').h4.col-sm-6 Mutation %
           input(type='number', min='0', max='100', name='mutationPct', ng-model='mutationPct', ng-init='mutationPct=9')#mutationPct.col-sm-4.ga-tsp
         div.row
           label(for='nGenerations').h4.col-sm-6 Generations
-          input(type='number', min='100', max='9999', name='nGenerations', ng-model='nGenerations', ng-init='nGenerations=1000')#nGenerations.col-sm-4.ga-tsp
+          input(type='number', min='100', max='4000', name='nGenerations', ng-model='nGenerations', ng-init='nGenerations=1000')#nGenerations.col-sm-4.ga-tsp
         div.row
           input(type='submit', value='GO!')#goButton.h4.col-sm-5
       div.col-sm-7
