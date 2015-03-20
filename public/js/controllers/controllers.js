@@ -107,7 +107,7 @@ var drawFinalResult = function($scope, data) {
     drawBestTour($scope, data, 'tsp-graph');
     finalFitness = data.fitness;
 
-    $('#result-text').html('<strong>Final Result (fitness: ' + Math.round(data.fitness) + '):</strong>');
+    $('#result-text').html('<strong>Final Result (distance: ' + Math.round(data.fitness) + '):</strong>');
     console.log('finished!');
 
 };
@@ -116,7 +116,7 @@ var drawInitialResult = function($scope, data) {
     drawBestTour($scope, data, 'tsp-graph');
     drawBestTour($scope, data, 'tsp-graph-g1');
     initialFitness = data.fitness;
-    $('#initial-text').html('<strong>Best Tour Gen 1 (fitness: ' + Math.round(data.fitness) + '):</strong>');
+    $('#initial-text').html('<strong>Best Tour Gen 1 (distance: ' + Math.round(data.fitness) + '):</strong>');
 };
 
 app.controller('gatspController', ['$scope', '$http', function($scope, $http) {
