@@ -41,10 +41,10 @@ body {
 }
 
 #goButton {
-  border-radius: 6px;
+  border-radius: 8px;
   border-color: green;
   background-color: white;
-  border-width: 2px;
+  border-width: 4px;
   color: black;
   font-weight: bold;
 }
