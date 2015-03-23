@@ -120,6 +120,7 @@ var drawInitialResult = function($scope, data) {
 };
 
 app.controller('gatspController', ['$scope', '$http', function($scope, $http) {
+  $('#avatar').attr('src', '/images/knight-clipartsco.jpg');
   $scope.statusMsg = '';
   $scope.runSim = function() {
     runSim($scope, false);
